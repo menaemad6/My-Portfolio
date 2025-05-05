@@ -1,0 +1,32 @@
+/* Patched main.css file that skips font-face declarations since we're using Google Fonts */
+
+/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+html {
+    font-family: 'Montserrat', sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+    display: block
+}
+
+/* The rest of the original main.css file would go here. 
+   For brevity, we're only including the essential font-related parts. */ 

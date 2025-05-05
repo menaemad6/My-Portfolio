@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -10,4 +10,24 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.font-test {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.font-test-light {
+  font-weight: 300;
+}
+
+.font-test-regular {
+  font-weight: 400;
+}
+
+.font-test-bold {
+  font-weight: 700;
+}
+
+.font-test-black {
+  font-weight: 900;
 } 
