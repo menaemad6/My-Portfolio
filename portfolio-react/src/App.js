@@ -18,17 +18,103 @@ export const ModalContext = React.createContext({
 const App = () => {
   // Global state to track if any modal is open
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isOuterNavVisible, setOuterNavVisible] = useState(false);
 
   useEffect(() => {
     // Initialize all the JavaScript functionality
     const { handleScrollDebounced, handleKeyUp, cleanupTouchEvents } = initializePortfolio();
+
+    // Add event listeners for outer nav visibility
+    const handleOuterNavToggle = () => {
+      setOuterNavVisible($('.outer-nav').hasClass('is-vis'));
+    };
+    
+    // Observe outer nav visibility changes
+    document.addEventListener('click', handleOuterNavToggle);
+
+    // Add additional CSS to ensure proper positioning
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+      /* Text selection color */
+      ::selection {
+        background-color: #0f33ff !important;
+        color: white !important;
+      }
+      
+      ::-moz-selection {
+        background-color: #0f33ff !important;
+        color: white !important;
+      }
+      
+      .perspective {
+        position: relative !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow: hidden !important;
+      }
+      
+      .perspective--modalview {
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+        overflow: hidden !important;
+        z-index: 9000 !important;
+        perspective: 1500px !important;
+      }
+      
+      .container {
+        position: relative !important;
+        transform: translateZ(0) translateX(0) rotateY(0deg) !important;
+        min-height: 100% !important;
+        outline: 30px solid #0f33ff !important;
+        transition: transform 0.4s !important;
+        backface-visibility: hidden !important;
+      }
+      
+      .effect-rotate-left .container {
+        transform-origin: 0% 50% !important;
+        transition: transform 0.4s !important;
+      }
+      
+      .effect-rotate-left--animate .container {
+        transform: translateZ(-1800px) translateX(-50%) rotateY(45deg) !important;
+        outline: 30px solid #0f33ff !important;
+      }
+      
+      /* Fix for outer nav positioning */
+      .outer-nav {
+        position: absolute !important;
+        top: 50% !important;
+        left: 55% !important;
+        transform: translateY(-50%) !important;
+        z-index: 9999 !important;
+      }
+      
+      /* Ensure modals appear above the navigation */
+      .project-modal-overlay {
+        z-index: 10000 !important;
+      }
+      
+      .project-modal {
+        z-index: 10001 !important;
+      }
+      
+      .project-modal-header {
+        z-index: 10002 !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
 
     // Cleanup function for component unmount
     return () => {
       // Remove event listeners when component unmounts
       document.removeEventListener('wheel', handleScrollDebounced);
       document.removeEventListener('keyup', handleKeyUp);
+      document.removeEventListener('click', handleOuterNavToggle);
       if (cleanupTouchEvents) cleanupTouchEvents();
+      document.head.removeChild(styleElement);
     };
   }, [isModalOpen]); // Re-initialize when modal state changes
 
@@ -266,9 +352,8 @@ const App = () => {
         <div className="mobile-notification">
           <MobileNotification />
         </div>
-        <div className="perspective effect-rotate-left">
+        <div className={`perspective effect-rotate-left ${isOuterNavVisible ? 'perspective--modalview' : ''}`}>
           <div className="container" id="viewport">
-            <div className="outer-nav--return"></div>
             <div id="viewport" className="l-viewport">
               <div className="l-wrapper">
                 <Header />
@@ -276,8 +361,8 @@ const App = () => {
                 <MainContent />
               </div>
             </div>
-            <OuterNav />
           </div>
+          <OuterNav />
         </div>
       </div>
     </ModalContext.Provider>
